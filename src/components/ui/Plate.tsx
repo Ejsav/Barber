@@ -28,7 +28,6 @@ export type PlateAspect =
   | 'square'
   | 'landscape'
   | 'wide'
-  | 'hero'
   | 'fill';
 
 export type PlateVariant = 'scene' | 'portrait' | 'detail';
@@ -39,7 +38,6 @@ const ASPECT: Record<PlateAspect, string> = {
   square: '1 / 1',
   landscape: '4 / 3',
   wide: '16 / 9',
-  hero: '3 / 4',
   fill: '',
 };
 
@@ -53,7 +51,6 @@ interface PlateProps {
   /** Small mono caption burned into the plate, press-sheet style. */
   caption?: string;
   className?: string;
-  imageClassName?: string;
   priority?: boolean;
   sizes?: string;
   /** Hides registration marks + caption for small thumbnails. */
@@ -74,7 +71,6 @@ export function Plate({
   seed = 7,
   caption,
   className,
-  imageClassName,
   priority = false,
   sizes = '(max-width: 768px) 100vw, 50vw',
   bare = false,
@@ -93,7 +89,7 @@ export function Plate({
           fill
           sizes={sizes}
           priority={priority}
-          className={cn('object-cover', imageClassName)}
+          className="object-cover"
         />
       </div>
     );

@@ -4,21 +4,19 @@ import { useBooking, type BookingIntent } from '@/components/booking/BookingProv
 import { cn } from '@/lib/cn';
 import { Magnetic } from '@/components/ui/Magnetic';
 
-type Variant = 'ember' | 'bone' | 'ink' | 'ghost' | 'ghost-bone';
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
-const VARIANTS: Record<Variant, string> = {
-  // Ink on ember clears AA (5.0:1); bone on ember does not (3.1:1). The
-  // hover state darkens AND inverts so it stays legible at 4.5:1.
-  ember:
-    'bg-ember text-ink hover:bg-ember-deep hover:text-bone border border-transparent',
-  bone: 'bg-bone text-ink hover:bg-bone-raised border border-transparent',
-  ink: 'bg-ink text-bone hover:bg-ink-panel border border-transparent',
-  ghost:
-    'bg-transparent text-bone border border-ink-line hover:border-bone hover:bg-bone hover:text-ink',
-  'ghost-bone':
-    'bg-transparent text-ink border border-bone-line hover:border-ink hover:bg-ink hover:text-bone',
-};
+/**
+ * One treatment, everywhere. BOOK is the single action this business runs on,
+ * so it looks identical on every page and every ground — a visitor never has
+ * to work out which button is the one that matters.
+ *
+ * Ink on ember clears AA at 5.0:1; bone on ember does not (3.1:1), and these
+ * labels are 11–14px. The hover state darkens AND inverts so both states stay
+ * above 4.5:1.
+ */
+const SURFACE =
+  'bg-ember text-ink hover:bg-ember-deep hover:text-bone border border-transparent';
 
 const SIZES: Record<Size, string> = {
   sm: 'h-10 px-4 text-[0.6875rem] tracking-[0.16em]',
@@ -30,7 +28,6 @@ const SIZES: Record<Size, string> = {
 interface BookButtonProps {
   intent?: BookingIntent;
   children?: React.ReactNode;
-  variant?: Variant;
   size?: Size;
   className?: string;
   /** Disables the magnetic pull (e.g. inside a scrolling rail). */
@@ -40,7 +37,6 @@ interface BookButtonProps {
 export function BookButton({
   intent,
   children = 'Book your chair',
-  variant = 'ember',
   size = 'lg',
   className,
   flat = false,
@@ -54,7 +50,7 @@ export function BookButton({
       className={cn(
         'group relative inline-flex items-center justify-center gap-3 font-mono uppercase',
         'transition-colors duration-300 ease-[var(--ease-out-expo)]',
-        VARIANTS[variant],
+        SURFACE,
         SIZES[size],
         className,
       )}

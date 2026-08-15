@@ -77,9 +77,12 @@ export default function BarbersPage() {
           <h2 id="specialty-index" className="label border-b border-ink-line pb-4 text-steel">
             By speciality
           </h2>
-          <Stagger className="grid gap-px border-b border-ink-line bg-ink-line sm:grid-cols-2 lg:grid-cols-3">
+          {/* Ruled by row, not by a gap-px grid over a coloured container —
+              nine specialities in a two-column grid would leave a blank
+              coloured cell in the last row. */}
+          <Stagger className="grid sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-3 lg:gap-x-10">
             {specialtyIndex.map((s) => (
-              <StaggerItem key={s.id} className="bg-ink py-5 pr-6 sm:px-6 sm:first:pl-0">
+              <StaggerItem key={s.id} className="border-b border-ink-line py-5 pr-6">
                 <p className="display-sm text-bone">{s.label}</p>
                 <p className="label-sm mt-2.5 text-steel-light">
                   {s.people.map((p) => p.name.split(' ')[0]).join(' · ')}

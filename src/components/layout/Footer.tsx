@@ -104,7 +104,7 @@ export function Footer() {
 
         {/* Oversized wordmark, cropped by the viewport edge */}
         <div className="mt-16 overflow-hidden lg:mt-24">
-          <Wordmark className="block w-full text-[clamp(4.5rem,20vw,20rem)] leading-[0.8]" />
+          <Wordmark className="block w-full whitespace-nowrap text-[clamp(3.5rem,34vw,30rem)] leading-[0.78]" />
         </div>
       </div>
 

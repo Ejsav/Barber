@@ -8,11 +8,14 @@ import type { Review } from '@/data/reviews';
  * WHAT PEOPLE SAY
  *
  * Not a three-card carousel. Reviews are set at three different weights and
- * laid into an asymmetric grid, so the wall reads the way a spread does — one
- * quotation dominates, the rest support it.
+ * laid out asymmetrically, so the wall reads the way a spread does — one
+ * quotation dominates, the rest support it, and a full-bleed ink band closes
+ * the section on the opposite ground.
  *
- * Nothing renders in production until reviews are marked verified in
- * data/reviews.ts. In development the demo copy shows with a DEMO badge.
+ * Until reviews are marked verified in data/reviews.ts, the demo copy renders
+ * with a visible "replace before launch" marker rather than being hidden — a
+ * hole in the page is easy to forget about, a red badge is not. What is hard
+ * -gated is the structured data: no Review markup is emitted while unverified.
  * -------------------------------------------------------------------------- */
 
 export function Reviews() {
@@ -25,7 +28,12 @@ export function Reviews() {
 
   return (
     <section
-      className="on-bone relative bg-bone py-20 text-ink lg:py-32"
+      className={cn(
+        'on-bone relative bg-bone pt-20 text-ink lg:pt-32',
+        // The closing ink band forms the section's bottom edge; padding below
+        // it would leave a stripe of bone under the band.
+        !big[1] && 'pb-20 lg:pb-32',
+      )}
       aria-labelledby="reviews-heading"
     >
       <div className="shell">
@@ -68,22 +76,38 @@ export function Reviews() {
           ))}
         </div>
 
-        {/* Fragments */}
+        {/* Fragments.
+            Ruled by row rather than by a `gap-px` grid painted over a coloured
+            container: with an arbitrary number of reviews, the leftover cells
+            in the last row would show through as blank coloured blocks at any
+            breakpoint where the count did not divide evenly. Row rules work at
+            every count. */}
         {small.length > 0 && (
-          <ul className="mt-14 grid gap-px border-t border-bone-line bg-bone-line sm:grid-cols-2 lg:mt-20 lg:grid-cols-3">
+          <ul className="mt-14 grid border-t border-bone-line sm:grid-cols-2 sm:gap-x-8 lg:mt-20 lg:grid-cols-3 lg:gap-x-10">
             {small.map((r, i) => (
-              <Reveal as="li" key={r.id} delay={i * 0.05} className="bg-bone p-6 lg:p-8">
+              <Reveal
+                as="li"
+                key={r.id}
+                delay={i * 0.05}
+                className="border-b border-bone-line py-6 lg:py-8"
+              >
                 <Quote review={r} size="small" />
               </Reveal>
             ))}
-            {big[1] && (
-              <Reveal as="li" delay={0.15} className="bg-ink p-6 text-bone lg:p-8">
-                <Quote review={big[1]} size="small" tone="ink" />
-              </Reveal>
-            )}
           </ul>
         )}
       </div>
+
+      {/* The section closes on a full-bleed ink band — the one review set
+          against the opposite ground, so the wall resolves rather than
+          trailing off. */}
+      {big[1] && (
+        <Reveal className="mt-14 bg-ink py-12 lg:mt-20 lg:py-16">
+          <div className="shell">
+            <Quote review={big[1]} size="mid" tone="ink" />
+          </div>
+        </Reveal>
+      )}
     </section>
   );
 }

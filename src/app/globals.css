@@ -27,7 +27,6 @@
   --color-ink-mute: #6b6459;
   --color-bone-raised: #e2dacc;
   --color-bone-line: #cdc3b1;
-  --color-bone-deep: #d6ccbb;
 
   /* -- Steel (secondary text, both grounds) --
    * All three clear 4.5:1 against --color-ink, because every one of them is
@@ -49,8 +48,6 @@
 
   /* -- Motion -- */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 
   /* -- Layout -- */
   --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem);
@@ -238,13 +235,6 @@
   padding-inline: var(--spacing-gutter);
 }
 
-/** Twelve-column editorial grid. Sections break out of it deliberately. */
-@utility grid-editorial {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: clamp(0.75rem, 1.5vw, 1.5rem);
-}
-
 /* ----------------------------------------------------------------------------
  * The halftone screen — brand signature
  * -------------------------------------------------------------------------- */
@@ -261,19 +251,6 @@
 @utility screen-dots-coarse {
   background-image: radial-gradient(currentColor 1.6px, transparent 1.9px);
   background-size: 9px 9px;
-}
-
-@utility screen-dots-fine {
-  background-image: radial-gradient(currentColor 0.6px, transparent 0.8px);
-  background-size: 3px 3px;
-}
-
-/** Hairline rule that reads as a print registration line. */
-@utility rule-ink {
-  border-color: var(--color-ink-line);
-}
-@utility rule-bone {
-  border-color: var(--color-bone-line);
 }
 
 /* ----------------------------------------------------------------------------
@@ -434,34 +411,6 @@ button:focus-visible .roll > span {
   .anim-line,
   .anim-rise {
     animation-delay: 0ms !important;
-  }
-}
-
-/* ----------------------------------------------------------------------------
- * Marquee
- * -------------------------------------------------------------------------- */
-
-@keyframes marquee-x {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
-  will-change: transform;
-}
-.marquee-reverse {
-  animation-direction: reverse;
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
   }
 }
 
