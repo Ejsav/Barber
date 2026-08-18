@@ -7,6 +7,7 @@ import { BookButton } from '@/components/ui/BookButton';
 import { Reveal } from '@/components/ui/Reveal';
 import { Rise } from '@/components/ui/HeroLines';
 import { FinalCta } from '@/components/sections/FinalCta';
+import { FadeDial } from '@/components/explorer/FadeDial';
 import { JsonLd } from '@/components/seo/JsonLd';
 
 import { pageMetadata, breadcrumbJsonLd } from '@/lib/seo';
@@ -269,6 +270,28 @@ export default async function ServicePage({
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+      )}
+
+      {/* ---- How short? ---------------------------------------------------
+          Only on the fade, where the question is unavoidable and the two axes
+          are the whole reason people end up with a cut they did not ask for. */}
+      {slug === 'the-fade' && (
+        <section
+          className="on-bone bg-bone py-16 text-ink lg:py-24"
+          aria-labelledby="dial-heading"
+        >
+          <div className="shell">
+            <div className="flex items-baseline gap-4 border-b border-bone-line pb-4">
+              <span className="label-sm text-ink-mute">◆</span>
+              <span className="label text-ink-mute" id="dial-heading">
+                How short, exactly?
+              </span>
+            </div>
+            <div className="mt-12">
+              <FadeDial tone="bone" />
+            </div>
           </div>
         </section>
       )}

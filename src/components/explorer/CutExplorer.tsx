@@ -9,9 +9,9 @@ import { BookButton } from '@/components/ui/BookButton';
 import { useBooking } from '@/components/booking/BookingProvider';
 import { resolvedLooks, type ResolvedLook } from '@/lib/looks';
 import { unsureOptions, unsurePrompt } from '@/data/looks';
-import { formatDuration, formatPrice } from '@/data/services';
+import { formatDuration, formatPrice, priceFloor } from '@/data/services';
 import { serviceHref } from '@/lib/services';
-import { specialtyLabels } from '@/data/barbers';
+import { barbers, specialtyLabels } from '@/data/barbers';
 import { workSeed } from '@/data/work';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
@@ -225,6 +225,31 @@ export function CutExplorer({
             </ul>
           </div>
         </div>
+
+        {/* On a wide screen the picker ends well above the answer panel beside
+            it, leaving a hole. Three facts fill it — and they are the three a
+            first-timer is weighing while they read the list. */}
+        <dl
+          className={cn(
+            'mt-10 hidden gap-x-10 gap-y-4 border-t pt-6 lg:flex lg:flex-wrap',
+            onBone ? 'border-bone-line' : 'border-ink-line',
+          )}
+        >
+          {[
+            ['From', `$${priceFloor}`],
+            ['Barbers', String(barbers.length)],
+            ['Consultation', 'Included'],
+          ].map(([k, v]) => (
+            <div key={k}>
+              <dt className={cn('label-sm', onBone ? 'text-ink-mute' : 'text-steel-dark')}>
+                {k}
+              </dt>
+              <dd className={cn('num mt-2 text-base', onBone ? 'text-ink' : 'text-bone')}>
+                {v}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
 
       {/* ---- The answer ---------------------------------------------------- */}

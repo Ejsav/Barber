@@ -39,6 +39,7 @@ export function FinalCta() {
   return (
     <section
       ref={ref}
+      id="final-cta"
       className="relative isolate overflow-hidden bg-ink py-24 lg:py-40"
       aria-labelledby="final-cta-heading"
     >

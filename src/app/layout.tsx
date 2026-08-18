@@ -11,6 +11,7 @@ import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileActionBar } from '@/components/layout/MobileActionBar';
+import { DesktopBookBar } from '@/components/layout/DesktopBookBar';
 import { BookingProvider } from '@/components/booking/BookingProvider';
 import { activeAnnouncement } from '@/lib/promotions';
 import { BookingDrawer } from '@/components/booking/BookingDrawer';
@@ -159,6 +160,7 @@ export default function RootLayout({
             </main>
             <Footer />
             <MobileActionBar />
+            <DesktopBookBar />
             <BookingDrawer />
             <BarberChooser />
           </BookingProvider>

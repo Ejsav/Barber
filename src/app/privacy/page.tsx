@@ -46,6 +46,13 @@ const SECTIONS: { heading: string; body: string[] }[] = [
     ],
   },
   {
+    heading: 'The map',
+    body: [
+      'The location pages draw their own map graphic and contact nobody. Press “Show map” and a Google Maps embed loads in its place — at that point, and only then, Google receives your IP address and sets its own cookies under its own privacy policy.',
+      'Nothing on this site loads that embed for you. Getting directions is a plain link and shares nothing until you follow it.',
+    ],
+  },
+  {
     heading: 'Links out',
     body: [
       'Instagram, TikTok, Google Maps and the shop’s Google Business Profile are third-party services. Following a link to one puts you under their terms and their tracking, not this site’s.',

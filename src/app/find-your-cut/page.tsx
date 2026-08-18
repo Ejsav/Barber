@@ -1,5 +1,6 @@
 import { PageHero } from '@/components/layout/PageHero';
 import { CutExplorer } from '@/components/explorer/CutExplorer';
+import { FadeDial } from '@/components/explorer/FadeDial';
 import { FaqList } from '@/components/faq/FaqList';
 import { FinalCta } from '@/components/sections/FinalCta';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -52,16 +53,45 @@ export default function FindYourCutPage() {
         </div>
       </section>
 
+      {/* The explorer answers "which cut". The dial answers the follow-up
+          question every fade booking runs into — "how short?" — which has two
+          axes and no shared vocabulary. */}
       <section
         className="on-bone bg-bone py-16 text-ink lg:py-24"
+        aria-labelledby="fade-dial-heading"
+      >
+        <div className="shell">
+          <div className="flex items-baseline gap-4 border-b border-bone-line pb-4">
+            <span className="label-sm text-ink-mute">◆</span>
+            <span className="label text-ink-mute">The fade dial</span>
+          </div>
+          <h2 id="fade-dial-heading" className="display-xl mt-8 text-ink lg:mt-12">
+            How short,
+            <br />
+            exactly?
+          </h2>
+          <p className="body-lg mt-7 max-w-2xl text-ink-mute">
+            Two things decide a fade and most people only know a word for one of
+            them. Set both and we will draw it, then give you the sentence to say
+            in the chair.
+          </p>
+
+          <div className="mt-14 lg:mt-20">
+            <FadeDial tone="bone" />
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="bg-ink py-16 lg:py-24"
         aria-labelledby="explorer-faq-heading"
       >
         <div className="shell">
-          <h2 id="explorer-faq-heading" className="display-lg text-ink">
+          <h2 id="explorer-faq-heading" className="display-lg text-bone">
             Still deciding.
           </h2>
           <div className="mt-10">
-            <FaqList items={items} tone="bone" />
+            <FaqList items={items} />
           </div>
         </div>
       </section>

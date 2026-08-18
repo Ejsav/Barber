@@ -112,10 +112,14 @@ export function AnnouncementBar({ initial }: { initial: Announcement | null }) {
 
   return (
     <div
-      className="announce relative z-10 flex items-center justify-center gap-3 bg-ember px-4 text-ink"
+      className="announce relative z-10 bg-ember text-ink"
       style={{ height: 'var(--announce-h)' }}
     >
-      <p className="label-sm truncate">
+      {/* Aligned to the page grid rather than the viewport: the dismiss control
+          used to sit hard against the window edge, a long way from the message
+          it belonged to, which read as two unrelated things. */}
+      <div className="shell flex h-full items-center justify-between gap-4">
+        <p className="label-sm truncate">
         {announcement.message}
         {announcement.href && (
           <Link
@@ -125,22 +129,23 @@ export function AnnouncementBar({ initial }: { initial: Announcement | null }) {
             {announcement.linkLabel ?? 'More'}
           </Link>
         )}
-      </p>
-      <button
-        type="button"
-        onClick={dismiss}
-        className="-mr-2 shrink-0 p-2 transition-opacity hover:opacity-70"
-        aria-label="Dismiss announcement"
-      >
-        <svg width="9" height="9" viewBox="0 0 9 9" aria-hidden="true">
-          <path
-            d="M1 1l7 7M8 1L1 8"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="square"
-          />
-        </svg>
-      </button>
+        </p>
+        <button
+          type="button"
+          onClick={dismiss}
+          className="-mr-2 shrink-0 p-2 transition-opacity hover:opacity-70"
+          aria-label="Dismiss announcement"
+        >
+          <svg width="9" height="9" viewBox="0 0 9 9" aria-hidden="true">
+            <path
+              d="M1 1l7 7M8 1L1 8"
+              stroke="currentColor"
+              strokeWidth="1.4"
+              strokeLinecap="square"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }
