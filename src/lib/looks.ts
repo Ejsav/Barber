@@ -22,6 +22,9 @@ export interface ResolvedLook {
   service: Service;
   alsoConsider: Service[];
   barbers: Barber[];
+  /** The frame that leads the panel. */
+  hero: WorkItem | null;
+  /** The supporting grid, with the lead frame removed so it is not shown twice. */
   work: WorkItem[];
 }
 
@@ -62,6 +65,13 @@ function resolve(look: Look): ResolvedLook | null {
     return null;
   }
 
+  const hero = work.find((w) => w.id === look.heroWorkId) ?? null;
+  if (!hero && isDev) {
+    throw new Error(
+      `data/looks.ts: look "${look.id}" leads with work "${look.heroWorkId}", which is not in data/work.ts`,
+    );
+  }
+
   return {
     look,
     service,
@@ -69,7 +79,10 @@ function resolve(look: Look): ResolvedLook | null {
       .map(getService)
       .filter((s): s is Service => Boolean(s)),
     barbers: roster,
-    work: work.filter((w) => w.category === look.workCategory).slice(0, 4),
+    hero,
+    work: work
+      .filter((w) => w.category === look.workCategory && w.id !== hero?.id)
+      .slice(0, 4),
   };
 }
 

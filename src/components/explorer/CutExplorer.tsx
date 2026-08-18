@@ -262,15 +262,21 @@ function LookPanel({
   const onBone = tone === 'bone';
   const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
   const { open } = useBooking();
-  const { look, service, barbers: roster, work, alsoConsider } = entry;
+  const { look, service, barbers: roster, work, alsoConsider, hero } = entry;
 
   return (
     <div>
       <div className="relative">
+        {/* The lead frame is a real photograph of the look, not a plate: this
+            is the largest thing in the panel and the whole section is an
+            argument that we can cut the thing you just pointed at. Landscape
+            rather than 16:9 so a portrait-shot frame crops through the head
+            instead of a narrow band across it. Falls back to the generated
+            plate if the photograph is not on disk. */}
         <Plate
-          src={null}
-          alt={`Reference plate for ${look.alias ?? look.label}`}
-          aspect="wide"
+          src={hero?.image ?? null}
+          alt={hero?.alt ?? `Reference plate for ${look.alias ?? look.label}`}
+          aspect="landscape"
           variant="detail"
           seed={look.seed}
           sizes="(max-width: 1024px) 100vw, 55vw"

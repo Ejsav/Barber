@@ -39,6 +39,13 @@ export interface Look {
   alsoConsider?: string[];
   /** Which lookbook category to pull imagery from. */
   workCategory: WorkCategory;
+  /**
+   * The lookbook frame that leads the panel — the one photograph someone sees
+   * before they read a word of it. Named explicitly rather than taken as the
+   * first of the category, because "the first one in the array" is not an art
+   * direction decision. Must exist in data/work.ts.
+   */
+  heroWorkId: string;
   /** Barbers who genuinely specialise. Must exist in data/barbers.ts. */
   barberSlugs: string[];
   seed: number;
@@ -55,6 +62,7 @@ export const looks: Look[] = [
     serviceId: 'the-fade',
     alsoConsider: ['cut-beard'],
     workCategory: 'fade',
+    heroWorkId: 'w-07',
     barberSlugs: ['marcus-reyes', 'desmond-whitfield', 'june-park'],
     seed: 121,
   },
@@ -68,6 +76,7 @@ export const looks: Look[] = [
     serviceId: 'the-cut',
     alsoConsider: ['line-up'],
     workCategory: 'classic',
+    heroWorkId: 'w-08',
     barberSlugs: ['yusuf-amari', 'nina-castellanos', 'marcus-reyes'],
     seed: 134,
   },
@@ -81,6 +90,7 @@ export const looks: Look[] = [
     serviceId: 'the-cut',
     alsoConsider: ['the-fade', 'scalp-treatment'],
     workCategory: 'textured',
+    heroWorkId: 'w-02',
     barberSlugs: ['desmond-whitfield', 'nina-castellanos', 'june-park'],
     seed: 147,
   },
@@ -94,6 +104,7 @@ export const looks: Look[] = [
     serviceId: 'scissor-work',
     alsoConsider: ['style-tonic'],
     workCategory: 'longer',
+    heroWorkId: 'w-03',
     barberSlugs: ['nina-castellanos', 'yusuf-amari'],
     seed: 158,
   },
@@ -107,6 +118,7 @@ export const looks: Look[] = [
     serviceId: 'beard-sculpt',
     alsoConsider: ['royal-shave', 'cut-beard'],
     workCategory: 'beard',
+    heroWorkId: 'w-04',
     barberSlugs: ['marcus-reyes', 'yusuf-amari'],
     seed: 169,
   },
@@ -120,6 +132,7 @@ export const looks: Look[] = [
     serviceId: 'the-fade',
     alsoConsider: ['design-work'],
     workCategory: 'fade',
+    heroWorkId: 'w-09',
     barberSlugs: ['desmond-whitfield', 'marcus-reyes'],
     seed: 181,
   },
