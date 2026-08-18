@@ -1,8 +1,11 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Plate } from '@/components/ui/Plate';
 import { useBooking } from '@/components/booking/BookingProvider';
 import { formatDuration, formatPrice, type Service } from '@/data/services';
+import { serviceHasPage } from '@/data/serviceDetail';
 import { cn } from '@/lib/cn';
 
 /* ----------------------------------------------------------------------------
@@ -12,6 +15,11 @@ import { cn } from '@/lib/cn';
  * left behind the type — the same tonal-gradient device as the wordmark — and
  * the row inverts. On touch there is no hover, so the row is simply a large,
  * unambiguous tap target with the price visible without interaction.
+ *
+ * Where a service has a page of its own, a second link sits under the row —
+ * outside the button, because a link nested inside a button is invalid markup
+ * and unreliable for keyboard and assistive users alike. Booking stays the
+ * primary action; reading about it is the quieter one.
  * -------------------------------------------------------------------------- */
 
 export function ServiceRow({
@@ -54,7 +62,7 @@ export function ServiceRow({
 
       <button
         type="button"
-        onClick={() => open({ serviceId: service.id })}
+        onClick={() => open({ serviceId: service.id, placement: 'service_row' })}
         className={cn(
           'flex w-full items-start gap-4 py-6 text-left transition-colors duration-500 sm:items-center sm:gap-8 lg:py-8',
           onBone
@@ -145,6 +153,20 @@ export function ServiceRow({
           </span>
         </span>
       </button>
+
+      {serviceHasPage(service.id) && (
+        <Link
+          href={`/services/${service.id}`}
+          className={cn(
+            'link-draw label-sm relative -mt-2 mb-6 ml-10 inline-block transition-colors duration-500 sm:ml-12',
+            onBone
+              ? 'text-ink-mute motion-safe:group-hover:text-bone/70'
+              : 'text-steel',
+          )}
+        >
+          What&rsquo;s involved
+        </Link>
+      )}
     </li>
   );
 }

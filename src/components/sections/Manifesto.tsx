@@ -74,12 +74,13 @@ export function Manifesto() {
       <div className="shell relative">
         <div className="lg:ml-[34%]">
           <div className="flex items-baseline gap-4 border-b border-ink-line pb-4">
-            <span className="label-sm text-steel-dark">04</span>
+            <span className="label-sm text-steel-dark">05</span>
             <span className="label text-steel">The standard</span>
           </div>
 
           <RevealLines
             as="h2"
+            id="standard-heading"
             lines={['Four rules.', 'No exceptions.']}
             className="display-xl mt-8 text-bone lg:mt-12"
           />

@@ -34,13 +34,14 @@ export function ShopExperience() {
     <section className="relative bg-ink py-20 lg:py-32" aria-labelledby="room-heading">
       <div className="shell">
         <div className="flex items-baseline gap-4 border-b border-ink-line pb-4">
-          <span className="label-sm text-steel-dark">07</span>
+          <span className="label-sm text-steel-dark">08</span>
           <span className="label text-steel">The room</span>
         </div>
 
         <div className="mt-8 lg:mt-12 lg:grid lg:grid-cols-12 lg:gap-10">
           <RevealLines
             as="h2"
+            id="room-heading"
             lines={['Clippers, records,', 'and nobody selling', 'you pomade.']}
             className="display-lg text-bone lg:col-span-7"
           />

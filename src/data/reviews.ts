@@ -17,6 +17,28 @@
  * ships them by accident.
  * ========================================================================== */
 
+/* Themes a first-time customer actually filters by. Only add a tag where the
+ * review genuinely speaks to it — a filter that returns a review which does not
+ * answer the question is worse than no filter. */
+export type ReviewTag =
+  | 'first-visit'
+  | 'fade'
+  | 'beard'
+  | 'textured'
+  | 'kids'
+  | 'longer'
+  | 'atmosphere';
+
+export const reviewTagLabels: Record<ReviewTag, string> = {
+  'first-visit': 'First visit',
+  fade: 'Fade quality',
+  beard: 'Beard & razor',
+  textured: 'Textured hair',
+  kids: 'Kids',
+  longer: 'Longer hair',
+  atmosphere: 'The room',
+};
+
 export interface Review {
   id: string;
   /** The line that gets set large. Keep it to one sentence. */
@@ -33,6 +55,8 @@ export interface Review {
   verified: false;
   /** Visual weight in the review wall: 1 = large pull quote. */
   weight: 1 | 2 | 3;
+  /** Themes this review actually speaks to. */
+  tags?: ReviewTag[];
 }
 
 export const reviews: Review[] = [
@@ -46,6 +70,7 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 1,
+    tags: ['first-visit'],
   },
   {
     id: 'r-02',
@@ -57,6 +82,7 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 2,
+    tags: ['textured', 'first-visit'],
   },
   {
     id: 'r-03',
@@ -67,6 +93,7 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 3,
+    tags: ['beard', 'atmosphere'],
   },
   {
     id: 'r-04',
@@ -78,6 +105,7 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 2,
+    tags: ['kids', 'first-visit'],
   },
   {
     id: 'r-05',
@@ -88,6 +116,7 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 3,
+    tags: ['longer', 'textured'],
   },
   {
     id: 'r-06',
@@ -97,6 +126,7 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 1,
+    tags: ['fade'],
   },
   {
     id: 'r-07',
@@ -106,18 +136,26 @@ export const reviews: Review[] = [
     rating: 5,
     verified: false,
     weight: 3,
+    tags: ['atmosphere'],
   },
   {
     id: 'r-08',
-    pull: 'I moved to Hamden and still drive in. Say what you want about that.',
+    pull: 'I moved to Branford and still drive in. Say what you want about that.',
     author: 'Chris B.',
     source: 'Google',
     barber: 'marcus-reyes',
     rating: 5,
     verified: false,
     weight: 2,
+    tags: ['fade'],
   },
 ];
 
 export const reviewsForBarber = (slug: string) =>
   reviews.filter((r) => r.barber === slug);
+
+/** Only tags that at least one review carries — never render an empty filter. */
+export const usedReviewTags = (list: Review[] = reviews): ReviewTag[] =>
+  (Object.keys(reviewTagLabels) as ReviewTag[]).filter((tag) =>
+    list.some((r) => r.tags?.includes(tag)),
+  );

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { RevealLines, Reveal } from '@/components/ui/Reveal';
+import { HeroLines, Rise } from '@/components/ui/HeroLines';
 import { cn } from '@/lib/cn';
 
 /* ----------------------------------------------------------------------------
@@ -21,6 +21,8 @@ export function PageHero({
   tone = 'ink',
   children,
 }: {
+  /** The small mark at the top-left rule — a section number on the numbered
+   * pages, or the one word that places the page ("Cuts", "Hamden"). */
   index: string;
   label: string;
   lines: string[];
@@ -83,14 +85,16 @@ export function PageHero({
           )}
         </div>
 
-        <RevealLines
+        {/* CSS, not Motion: this is the LCP element on every interior page.
+            See components/ui/HeroLines.tsx for the measurement behind it. */}
+        <HeroLines
           as="h1"
           lines={lines}
           className={cn('display-xl mt-8 lg:mt-12', onBone ? 'text-ink' : 'text-bone')}
         />
 
         {standfirst && (
-          <Reveal delay={0.12}>
+          <Rise delay={0.28}>
             <p
               className={cn(
                 'body-lg mt-7 max-w-2xl',
@@ -99,11 +103,11 @@ export function PageHero({
             >
               {standfirst}
             </p>
-          </Reveal>
+          </Rise>
         )}
 
         {meta && meta.length > 0 && (
-          <Reveal delay={0.2}>
+          <Rise delay={0.36}>
             <dl
               className={cn(
                 'mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t pt-6',
@@ -121,7 +125,7 @@ export function PageHero({
                 </div>
               ))}
             </dl>
-          </Reveal>
+          </Rise>
         )}
 
         {children}

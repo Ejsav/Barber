@@ -17,7 +17,12 @@ interface PageMetaInput {
   path: string;
   /** Set false on pages that should not be indexed. */
   index?: boolean;
-  ogImage?: { url: string; width: number; height: number; alt: string };
+  /**
+   * Pass `null` on a route that has its own `opengraph-image` file — naming an
+   * image here would override the generated one and every barber would share
+   * the shop's card.
+   */
+  ogImage?: { url: string; width: number; height: number; alt: string } | null;
 }
 
 export function pageMetadata({
@@ -42,14 +47,14 @@ export function pageMetadata({
       title,
       description,
       locale: 'en_US',
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       site: business.twitterHandle,
       title,
       description,
-      images: [ogImage.url],
+      ...(ogImage ? { images: [ogImage.url] } : {}),
     },
   };
 }

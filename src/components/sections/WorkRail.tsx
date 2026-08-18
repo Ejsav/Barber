@@ -7,6 +7,8 @@ import { motion, useScroll } from 'motion/react';
 import { WorkCard } from '@/components/work/WorkCard';
 import { RevealLines, Reveal } from '@/components/ui/Reveal';
 import { useParallax } from '@/lib/useParallax';
+import { TrackedAnchor } from '@/components/analytics/TrackedAnchor';
+import { business } from '@/data/business';
 import { featuredWork } from '@/data/work';
 import type { PlateAspect } from '@/components/ui/Plate';
 
@@ -48,15 +50,28 @@ export function WorkRail() {
     >
       <div className="shell">
         <div className="flex items-baseline gap-4 border-b border-ink-line pb-4">
-          <span className="label-sm text-steel-dark">02</span>
+          <span className="label-sm text-steel-dark">03</span>
           <span className="label text-steel">The Book</span>
-          <Link href="/work" className="link-draw label ml-auto text-ember">
-            Open the full book
-          </Link>
+          <div className="ml-auto flex items-center gap-6">
+            {/* The handle, not an embedded feed — see SocialRail for why. */}
+            <TrackedAnchor
+              href={business.social.instagram}
+              external
+              event="instagram_click"
+              payload={{ placement: 'work_rail' }}
+              className="link-draw label hidden text-steel-light sm:inline-block"
+            >
+              {business.social.instagramHandle}
+            </TrackedAnchor>
+            <Link href="/work" className="link-draw label text-ember">
+              Open the full book
+            </Link>
+          </div>
         </div>
 
         <div className="mt-7 lg:mt-10 lg:flex lg:items-end lg:gap-10">
           <RevealLines
+            id="work-heading"
             lines={['Proof,', 'not promises.']}
             className="display-xl flex-1 text-bone"
           />

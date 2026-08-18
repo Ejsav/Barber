@@ -36,7 +36,7 @@ export default function NotFound() {
         </p>
 
         <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <BookButton size="lg" className="w-full sm:w-auto" />
+          <BookButton size="lg" placement="not_found" className="w-full sm:w-auto" />
           <Link
             href="/"
             className="label flex h-14 items-center justify-center border border-ink-line px-6 text-bone transition-colors hover:border-bone"

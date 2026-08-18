@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRef } from 'react';
 import { motion, useScroll } from 'motion/react';
 
@@ -9,6 +10,8 @@ import { BookButton } from '@/components/ui/BookButton';
 import { TodayStatus } from '@/components/ui/TodayStatus';
 import { business } from '@/data/business';
 import { priceFloor } from '@/data/services';
+import { isMultiLocation, locations } from '@/data/locations';
+import { track } from '@/lib/analytics';
 
 /* ----------------------------------------------------------------------------
  * The last thing on the page is the thing we want them to do.
@@ -36,6 +39,7 @@ export function FinalCta() {
   return (
     <section
       ref={ref}
+      id="final-cta"
       className="relative isolate overflow-hidden bg-ink py-24 lg:py-40"
       aria-labelledby="final-cta-heading"
     >
@@ -66,7 +70,7 @@ export function FinalCta() {
         </p>
 
         <div className="mt-10 flex flex-col items-center gap-6">
-          <BookButton size="xl" className="w-full sm:w-auto">
+          <BookButton size="xl" placement="final_cta" className="w-full sm:w-auto">
             Book your chair
           </BookButton>
 
@@ -77,6 +81,7 @@ export function FinalCta() {
             </span>
             <a
               href={business.phoneHref}
+              onClick={() => track('phone_click', { placement: 'final_cta' })}
               className="link-draw label text-steel-light"
             >
               Or call {business.phone}
@@ -88,6 +93,18 @@ export function FinalCta() {
               From <span className="num text-ember">${priceFloor}</span>
             </span>
           </div>
+
+          {/* The last thing anyone should have to hunt for is where we are. */}
+          <address className="label-sm not-italic text-steel-dark">
+            {locations
+              .map((l) => `${l.address.street}, ${l.city}`)
+              .join('   ·   ')}
+            {isMultiLocation && (
+              <Link href="/locations" className="link-draw ml-3 text-steel-light">
+                Both shops
+              </Link>
+            )}
+          </address>
         </div>
       </div>
     </section>

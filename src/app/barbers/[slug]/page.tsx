@@ -8,7 +8,10 @@ import { WorkCard } from '@/components/work/WorkCard';
 import { ServiceRow } from '@/components/services/ServiceRow';
 import { FinalCta } from '@/components/sections/FinalCta';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Reveal, RevealLines } from '@/components/ui/Reveal';
+import { ViewTracker } from '@/components/analytics/ViewTracker';
+import { TrackedAnchor } from '@/components/analytics/TrackedAnchor';
+import { Reveal } from '@/components/ui/Reveal';
+import { HeroLines, Rise } from '@/components/ui/HeroLines';
 
 import { pageMetadata, breadcrumbJsonLd } from '@/lib/seo';
 import { barberJsonLd } from '@/lib/jsonld';
@@ -19,6 +22,7 @@ import { workByBarber } from '@/data/work';
 import { reviewsForBarber } from '@/data/reviews';
 import { visibleReviews } from '@/lib/content';
 import { formatDayHours } from '@/lib/hours';
+import { isMultiLocation, locationsForBarber } from '@/data/locations';
 
 export function generateStaticParams() {
   return barbers.map((b) => ({ slug: b.slug }));
@@ -39,6 +43,9 @@ export async function generateMetadata({
       .map((s) => specialtyLabels[s])
       .join(', ')}. ${barber.yearsCutting} years behind the chair, from $${barber.startingPrice}. See their work and book directly.`,
     path: `/barbers/${barber.slug}`,
+    /* Each profile generates its own social card in opengraph-image.tsx — a
+     * shared link should show the barber, not the shop. */
+    ogImage: null,
   });
 }
 
@@ -60,10 +67,15 @@ export default async function BarberPage({
     reviewsForBarber(barber.slug),
   );
   const others = barbers.filter((b) => b.slug !== barber.slug);
+  const chairs = locationsForBarber(barber.slug);
   const jsonld = barberJsonLd(barber.slug);
 
   return (
     <>
+      {/* Which chairs get looked at is as useful to the shop as which get
+          booked — it is how you find the barber whose page converts badly. */}
+      <ViewTracker event="barber_profile_view" payload={{ barber: barber.slug }} />
+
       {jsonld && <JsonLd id={`ld-barber-${barber.slug}`} data={jsonld} />}
       <JsonLd
         id={`ld-breadcrumb-${barber.slug}`}
@@ -106,19 +118,20 @@ export default async function BarberPage({
 
           {/* Identity + actions */}
           <div className="mt-8 lg:col-span-6 lg:col-start-7 lg:mt-0">
-            <RevealLines
+            {/* CSS-driven: the barber's name is this page's LCP element. */}
+            <HeroLines
               as="h1"
               lines={[firstName, barber.name.split(' ').slice(1).join(' ')]}
               className="display-xl text-bone"
             />
 
-            <Reveal delay={0.1}>
+            <Rise delay={0.24}>
               <p className="body-lg mt-6 max-w-xl text-bone/80">
                 “{barber.statement}”
               </p>
-            </Reveal>
+            </Rise>
 
-            <Reveal delay={0.18}>
+            <Rise delay={0.32}>
               <dl className="mt-9 grid grid-cols-2 gap-x-8 gap-y-6 border-y border-ink-line py-6 sm:grid-cols-4">
                 <div>
                   <dt className="label-sm text-steel-dark">Cutting</dt>
@@ -146,37 +159,58 @@ export default async function BarberPage({
                     </dd>
                   </div>
                 )}
+                {isMultiLocation && chairs.length > 0 && (
+                  <div>
+                    <dt className="label-sm text-steel-dark">Cuts at</dt>
+                    <dd className="mt-1.5 text-base text-bone">
+                      {chairs.map((l, i) => (
+                        <span key={l.slug}>
+                          {i > 0 && ', '}
+                          <Link
+                            href={`/locations/${l.slug}`}
+                            className="link-draw"
+                          >
+                            {l.shortName}
+                          </Link>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                )}
               </dl>
-            </Reveal>
+            </Rise>
 
-            <Reveal delay={0.24}>
+            <Rise delay={0.4}>
               <p className="label mt-6 text-steel">Specialities</p>
               <p className="mt-3 text-[0.9375rem] leading-relaxed text-steel-light">
                 {barber.specialties.map((s) => specialtyLabels[s]).join(' · ')}
               </p>
-            </Reveal>
+            </Rise>
 
-            <Reveal delay={0.3}>
+            <Rise delay={0.48}>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <BookButton
-                  intent={{ barberSlug: barber.slug }}
+                  intent={{ barberSlug: barber.slug, placement: 'barber_profile' }}
                   size="lg"
                   className="w-full sm:w-auto"
                 >
                   Book with {firstName}
                 </BookButton>
+                {/* Hidden entirely when a barber has no Instagram, rather than
+                    rendered as a dead control. */}
                 {barber.instagram && (
-                  <a
+                  <TrackedAnchor
                     href={barber.instagram}
-                    target="_blank"
-                    rel="noreferrer"
+                    external
+                    event="instagram_click"
+                    payload={{ barber: barber.slug, placement: 'barber_profile' }}
                     className="label flex h-14 items-center justify-center gap-2 border border-ink-line px-6 text-bone transition-colors hover:border-bone"
                   >
                     {barber.instagramHandle ?? 'Instagram'}
-                  </a>
+                  </TrackedAnchor>
                 )}
               </div>
-            </Reveal>
+            </Rise>
           </div>
         </div>
       </header>
@@ -253,7 +287,9 @@ export default async function BarberPage({
               <span className="label-sm text-steel-dark">
                 {String(portfolio.length).padStart(2, '0')}
               </span>
-              <span className="label text-steel">{firstName}&rsquo;s work</span>
+              <span className="label text-steel" id="work-heading">
+                {firstName}&rsquo;s work
+              </span>
               <Link href="/work" className="link-draw label ml-auto text-ember">
                 The full book
               </Link>

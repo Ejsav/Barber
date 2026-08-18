@@ -1,10 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 
 import { useBooking } from '@/components/booking/BookingProvider';
-import { lockScroll } from '@/components/layout/SmoothScroll';
+import { useModalShell } from '@/lib/useModalShell';
 import { business, weekdayOrder } from '@/data/business';
 import { barbers } from '@/data/barbers';
 import { formatDuration, formatPrice, services } from '@/data/services';
@@ -91,7 +91,7 @@ function buildDays(barberSlug: string | undefined, durationMin: number): DayOpti
 }
 
 export function BookingDrawer() {
-  const { isOpen, close } = useBooking();
+  const { isOpen, mode, close } = useBooking();
 
   /* The panel is mounted only while the drawer is open, so its step/date/time
    * state initialises straight from the visitor's intent and is discarded on
@@ -99,7 +99,7 @@ export function BookingDrawer() {
    * render, and no chance of the drawer reopening on a stale step. */
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && mode === 'drawer' && (
         <div className="fixed inset-0 z-[120]" role="presentation">
           <motion.button
             type="button"
@@ -121,8 +121,7 @@ export function BookingDrawer() {
 function BookingPanel() {
   const { close, intent, setIntent } = useBooking();
   const reduce = useReducedMotion();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const lastFocused = useRef<HTMLElement | null>(null);
+  const panelRef = useModalShell<HTMLDivElement>(close);
 
   const [step, setStep] = useState(() =>
     intent.serviceId ? (intent.barberSlug ? 2 : 1) : 0,
@@ -132,47 +131,6 @@ function BookingPanel() {
 
   const service = services.find((s) => s.id === intent.serviceId);
   const barber = barbers.find((b) => b.slug === intent.barberSlug);
-
-  /* Scroll lock, focus trap and escape — genuine external-system work. */
-  useEffect(() => {
-    lastFocused.current = document.activeElement as HTMLElement;
-    lockScroll(true);
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        close();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const nodes = panelRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (!nodes || nodes.length === 0) return;
-      const first = nodes[0];
-      const last = nodes[nodes.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-
-    document.addEventListener('keydown', onKey);
-    const t = window.setTimeout(() => {
-      panelRef.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus();
-    }, 60);
-
-    const restoreTo = lastFocused.current;
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      window.clearTimeout(t);
-      lockScroll(false);
-      restoreTo?.focus?.();
-    };
-  }, [close]);
 
   const eligibleBarbers = useMemo(
     () =>

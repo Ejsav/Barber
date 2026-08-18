@@ -58,9 +58,9 @@ export const work: WorkItem[] = [
     barber: 'marcus-reyes',
     serviceId: 'the-fade',
     aspect: 'tall',
-    image: null,
+    image: '/work/w-01.jpg',
     alt: 'Close crop of a zero skin fade with a razored hard part, shot from behind at the nape',
-    beforeImage: null,
+    beforeImage: '/work/w-01-before.jpg',
     beforeAlt: 'The same client before the cut, grown out roughly five weeks',
     note: 'Five weeks of growth, taken back to skin without losing the shape on top.',
     featured: true,
@@ -72,7 +72,7 @@ export const work: WorkItem[] = [
     barber: 'desmond-whitfield',
     serviceId: 'the-fade',
     aspect: 'portrait',
-    image: null,
+    image: '/work/w-02.jpg',
     alt: 'Profile of a sponge-set coil pattern above a clean mid taper',
     featured: true,
   },
@@ -83,7 +83,7 @@ export const work: WorkItem[] = [
     barber: 'nina-castellanos',
     serviceId: 'scissor-work',
     aspect: 'landscape',
-    image: null,
+    image: '/work/w-03.jpg',
     alt: 'Scissor-cut fringe falling past the brow, dried and unstyled',
     note: 'Cut entirely dry so the weight sits where it actually falls.',
     featured: true,
@@ -95,7 +95,7 @@ export const work: WorkItem[] = [
     barber: 'marcus-reyes',
     serviceId: 'cut-beard',
     aspect: 'square',
-    image: null,
+    image: '/work/w-04.jpg',
     alt: 'Three-quarter view of a full beard squared to the jaw with a razored cheek line',
     featured: true,
   },
@@ -106,7 +106,7 @@ export const work: WorkItem[] = [
     barber: 'desmond-whitfield',
     serviceId: 'the-fade',
     aspect: 'portrait',
-    image: null,
+    image: '/work/w-05.jpg',
     alt: 'Overhead detail of a 360 wave pattern above a low fade',
   },
   {
@@ -116,7 +116,7 @@ export const work: WorkItem[] = [
     barber: 'nina-castellanos',
     serviceId: 'scissor-work',
     aspect: 'tall',
-    image: null,
+    image: '/work/w-06.jpg',
     alt: 'Long layered curtain cut on wavy hair, shot in window light',
     featured: true,
   },
@@ -127,7 +127,7 @@ export const work: WorkItem[] = [
     barber: 'marcus-reyes',
     serviceId: 'the-fade',
     aspect: 'square',
-    image: null,
+    image: '/work/w-07.jpg',
     alt: 'Side profile of a drop fade curving behind the ear with a point-cut top',
   },
   {
@@ -137,7 +137,7 @@ export const work: WorkItem[] = [
     barber: 'yusuf-amari',
     serviceId: 'scissor-work',
     aspect: 'portrait',
-    image: null,
+    image: '/work/w-08.jpg',
     alt: 'Classic scissor side part with a soft taper, combed and dressed with tonic',
     featured: true,
   },
@@ -148,7 +148,7 @@ export const work: WorkItem[] = [
     barber: 'desmond-whitfield',
     serviceId: 'design-work',
     aspect: 'wide',
-    image: null,
+    image: '/work/w-09.jpg',
     alt: 'Detail of two freehand razor lines cut through a skin fade at the temple',
     note: 'Drawn freehand. No stencil, no guide.',
   },
@@ -159,7 +159,7 @@ export const work: WorkItem[] = [
     barber: 'yusuf-amari',
     serviceId: 'royal-shave',
     aspect: 'landscape',
-    image: null,
+    image: '/work/w-10.jpg',
     alt: 'Hot towel lifted from a shaved jaw, steam visible against a dark background',
   },
   {
@@ -169,7 +169,7 @@ export const work: WorkItem[] = [
     barber: 'marcus-reyes',
     serviceId: 'the-fade',
     aspect: 'portrait',
-    image: null,
+    image: '/work/w-11.jpg',
     alt: 'Burst fade radiating around the ear into a longer back',
   },
   {
@@ -179,7 +179,7 @@ export const work: WorkItem[] = [
     barber: 'nina-castellanos',
     serviceId: 'scissor-work',
     aspect: 'square',
-    image: null,
+    image: '/work/w-12.jpg',
     alt: 'Blunt jaw-length bob cut with scissors over comb, shot from behind',
   },
   {
@@ -189,9 +189,9 @@ export const work: WorkItem[] = [
     barber: 'desmond-whitfield',
     serviceId: 'the-cut',
     aspect: 'tall',
-    image: null,
+    image: '/work/w-13.jpg',
     alt: 'Twist-out curl definition over a clean taper at the nape',
-    beforeImage: null,
+    beforeImage: '/work/w-13-before.jpg',
     beforeAlt: 'The same client before, with an uneven grown-out taper',
   },
   {
@@ -201,7 +201,7 @@ export const work: WorkItem[] = [
     barber: 'yusuf-amari',
     serviceId: 'grey-blend',
     aspect: 'square',
-    image: null,
+    image: '/work/w-14.jpg',
     alt: 'Temple detail showing softened grey blended into natural dark hair',
     note: 'Half the grey taken down. No line when it grows out.',
   },
@@ -212,7 +212,7 @@ export const work: WorkItem[] = [
     barber: 'june-park',
     serviceId: 'the-cut',
     aspect: 'portrait',
-    image: null,
+    image: '/work/w-15.jpg',
     alt: 'Short textured crop with a blunt fringe over a mid fade',
     featured: true,
   },
@@ -223,7 +223,7 @@ export const work: WorkItem[] = [
     barber: 'june-park',
     serviceId: 'junior',
     aspect: 'landscape',
-    image: null,
+    image: '/work/w-16.jpg',
     alt: 'A child’s first haircut, cape on, booster in the chair',
     note: 'First haircuts get a keepsake envelope and a photograph if you want one.',
   },
@@ -235,3 +235,14 @@ export const workByBarber = (slug: string) =>
   work.filter((w) => w.barber === slug);
 
 export const getWork = (id: string) => work.find((w) => w.id === id);
+
+/**
+ * Deterministic plate seed for a lookbook item.
+ *
+ * Every generated plate varies with its seed, so this has to be derived from
+ * the WHOLE id — reading a single character out of "w-01" yields two distinct
+ * values across sixteen frames and the grid renders as the same picture over
+ * and over. One helper, so no call site can get that wrong again.
+ */
+export const workSeed = (item: Pick<WorkItem, 'id'>) =>
+  Number(item.id.replace(/\D/g, '')) * 7 + 3;

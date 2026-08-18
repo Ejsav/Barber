@@ -1,5 +1,8 @@
+import Link from 'next/link';
+
 import { business } from '@/data/business';
 import { barbers } from '@/data/barbers';
+import { isMultiLocation, locations } from '@/data/locations';
 import { trustFigures } from '@/lib/content';
 import { Stagger, StaggerItem } from '@/components/ui/Reveal';
 
@@ -18,7 +21,15 @@ import { Stagger, StaggerItem } from '@/components/ui/Reveal';
 const FACTS = [
   { k: 'Chairs', v: `${barbers.length} barbers`, sub: 'Book by name' },
   { k: 'Walk-ins', v: 'Taken daily', sub: 'Appointments first' },
-  { k: 'Where', v: business.neighborhood, sub: business.address.street },
+  /* One shop names the neighbourhood; two name the count. The strip states
+   * what is true rather than being edited by hand when a shop opens. */
+  isMultiLocation
+    ? {
+        k: 'Where',
+        v: `${locations.length} shops`,
+        sub: locations.map((l) => l.city).join(' · '),
+      }
+    : { k: 'Where', v: business.neighborhood, sub: business.address.street },
   { k: 'Booking', v: 'Online', sub: 'Or call the shop' },
 ];
 
@@ -43,7 +54,9 @@ export function TrustStrip() {
                 )}
               </div>
               <p className="label mt-3 text-ink-mute">
-                {trust.reviewCount}+ reviews on {trust.source}
+                <Link href="/reviews" className="link-draw">
+                  {trust.reviewCount}+ reviews on {trust.source}
+                </Link>
               </p>
               {trust.isPlaceholder && (
                 <p className="mt-2 text-[0.6875rem] leading-snug text-ember-deep">
@@ -72,7 +85,7 @@ export function TrustStrip() {
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span className="flex gap-1" aria-label={`${rating} out of 5`}>
+    <span role="img" className="flex gap-1" aria-label={`${rating} out of 5`}>
       {[0, 1, 2, 3, 4].map((i) => (
         <svg
           key={i}

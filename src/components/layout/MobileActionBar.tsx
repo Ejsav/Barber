@@ -1,10 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, useReducedMotion } from 'motion/react';
 
 import { useBooking } from '@/components/booking/BookingProvider';
-import { business, directionsUrl } from '@/data/business';
+import {
+  locationDirectionsUrl,
+  locations,
+  primaryLocation,
+} from '@/data/locations';
+import { track } from '@/lib/analytics';
 
 /* ----------------------------------------------------------------------------
  * Persistent thumb-reach action bar.
@@ -17,7 +23,14 @@ import { business, directionsUrl } from '@/data/business';
 export function MobileActionBar() {
   const { open, isOpen } = useBooking();
   const reduce = useReducedMotion();
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+
+  /* On a location page, CALL and DIRECTIONS have to mean THAT shop. Reading it
+   * off the path costs nothing and avoids threading a provider through the
+   * whole tree for one bar. */
+  const location =
+    locations.find((l) => pathname === `/locations/${l.slug}`) ?? primaryLocation;
 
   useEffect(() => {
     let ticking = false;
@@ -52,7 +65,13 @@ export function MobileActionBar() {
     >
       <div className="flex items-stretch gap-px bg-ink-line p-px">
         <a
-          href={business.phoneHref}
+          href={location.phoneHref}
+          onClick={() =>
+            track('phone_click', {
+              placement: 'mobile_bar',
+              location: location.slug,
+            })
+          }
           className="label flex h-14 flex-1 items-center justify-center gap-2 bg-ink text-steel-light active:bg-ink-panel"
         >
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -66,9 +85,15 @@ export function MobileActionBar() {
           Call
         </a>
         <a
-          href={directionsUrl}
+          href={locationDirectionsUrl(location)}
           target="_blank"
           rel="noreferrer"
+          onClick={() =>
+            track('directions_click', {
+              placement: 'mobile_bar',
+              location: location.slug,
+            })
+          }
           className="label flex h-14 flex-1 items-center justify-center gap-2 bg-ink text-steel-light active:bg-ink-panel"
         >
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -84,7 +109,9 @@ export function MobileActionBar() {
         </a>
         <button
           type="button"
-          onClick={() => open()}
+          onClick={() =>
+            open({ placement: 'mobile_bar', locationSlug: location.slug })
+          }
           className="label flex h-14 flex-[1.35] items-center justify-center gap-2 bg-ember text-ink active:bg-ember-deep active:text-bone"
         >
           Book

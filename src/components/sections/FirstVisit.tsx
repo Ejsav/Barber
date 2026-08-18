@@ -68,7 +68,7 @@ export function FirstVisit() {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-6">
             <div className="flex items-baseline gap-4 border-b border-ink/40 pb-4">
-              <span className="label-sm text-ink">06</span>
+              <span className="label-sm text-ink">07</span>
               <span className="label text-ink">First visit</span>
             </div>
 

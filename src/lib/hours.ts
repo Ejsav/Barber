@@ -6,6 +6,8 @@ import {
   type WeekdayKey,
 } from '@/data/business';
 
+export type WeekHours = Record<WeekdayKey, DayHours>;
+
 /** "09:00" -> "9am", "19:30" -> "7:30pm" */
 export function formatTime(value: string): string {
   const [h, m] = value.split(':').map(Number);
@@ -19,27 +21,36 @@ export function formatDayHours(day: DayHours): string {
   return `${formatTime(day.open)} — ${formatTime(day.close)}`;
 }
 
-export const weekSchedule = weekdayOrder.map((key) => ({
-  key,
-  label: weekdayLabels[key],
-  short: weekdayLabels[key].slice(0, 3),
-  hours: business.hours[key],
-  display: formatDayHours(business.hours[key]),
-}));
+/** The week as rows, for any shop's hours. */
+export function weekScheduleFor(hours: WeekHours) {
+  return weekdayOrder.map((key) => ({
+    key,
+    label: weekdayLabels[key],
+    short: weekdayLabels[key].slice(0, 3),
+    hours: hours[key],
+    display: formatDayHours(hours[key]),
+  }));
+}
+
+/** The primary shop's week — the default everywhere one shop is implied. */
+export const weekSchedule = weekScheduleFor(business.hours);
 
 /**
  * Today's hours, resolved on the client so the answer matches the visitor's
  * clock rather than the build machine's. Rendering this on the server would
  * bake a stale day into the static HTML.
  */
-export function resolveToday(now: Date = new Date()) {
+export function resolveToday(
+  hours: WeekHours = business.hours,
+  now: Date = new Date(),
+) {
   const index = (now.getDay() + 6) % 7; // JS weeks start Sunday; ours start Monday
   const key = weekdayOrder[index] as WeekdayKey;
-  const hours = business.hours[key];
+  const day = hours[key];
   const label = weekdayLabels[key];
 
-  if (!hours.open || !hours.close) {
-    return { key, label, isOpen: false, display: 'Closed today', hours };
+  if (!day.open || !day.close) {
+    return { key, label, isOpen: false, display: 'Closed today', hours: day };
   }
 
   const minutes = now.getHours() * 60 + now.getMinutes();
@@ -47,8 +58,8 @@ export function resolveToday(now: Date = new Date()) {
     const [h, m] = t.split(':').map(Number);
     return h * 60 + m;
   };
-  const open = toMinutes(hours.open);
-  const close = toMinutes(hours.close);
+  const open = toMinutes(day.open);
+  const close = toMinutes(day.close);
   const isOpen = minutes >= open && minutes < close;
   const closingSoon = isOpen && close - minutes <= 60;
 
@@ -58,16 +69,16 @@ export function resolveToday(now: Date = new Date()) {
     isOpen,
     closingSoon,
     display: isOpen
-      ? `Open until ${formatTime(hours.close)}`
+      ? `Open until ${formatTime(day.close)}`
       : minutes < open
-        ? `Opens ${formatTime(hours.open)}`
+        ? `Opens ${formatTime(day.open)}`
         : 'Closed for the day',
-    hours,
+    hours: day,
   };
 }
 
-/** Schema.org openingHours strings, e.g. "Tu,We 10:00-19:00". */
-export function openingHoursSpecification() {
+/** Schema.org openingHours specification for any shop's hours. */
+export function openingHoursSpecification(hours: WeekHours = business.hours) {
   const map: Record<WeekdayKey, string> = {
     monday: 'Monday',
     tuesday: 'Tuesday',
@@ -78,11 +89,35 @@ export function openingHoursSpecification() {
     sunday: 'Sunday',
   };
   return weekdayOrder
-    .filter((d) => business.hours[d].open && business.hours[d].close)
+    .filter((d) => hours[d].open && hours[d].close)
     .map((d) => ({
       '@type': 'OpeningHoursSpecification' as const,
       dayOfWeek: `https://schema.org/${map[d]}`,
-      opens: business.hours[d].open as string,
-      closes: business.hours[d].close as string,
+      opens: hours[d].open as string,
+      closes: hours[d].close as string,
     }));
+}
+
+/** Compact summary like "Tue–Sat" for a shop's open days. */
+export function openDaysSummary(hours: WeekHours): string {
+  const open = weekdayOrder.filter((d) => hours[d].open && hours[d].close);
+  if (open.length === 0) return 'Closed';
+  if (open.length === 7) return 'Every day';
+
+  const short = (d: WeekdayKey) => weekdayLabels[d].slice(0, 3);
+  const runs: WeekdayKey[][] = [];
+  let run: WeekdayKey[] = [];
+  weekdayOrder.forEach((d) => {
+    if (hours[d].open && hours[d].close) {
+      run.push(d);
+    } else if (run.length) {
+      runs.push(run);
+      run = [];
+    }
+  });
+  if (run.length) runs.push(run);
+
+  return runs
+    .map((r) => (r.length === 1 ? short(r[0]) : `${short(r[0])}–${short(r[r.length - 1])}`))
+    .join(', ');
 }

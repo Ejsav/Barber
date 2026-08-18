@@ -21,7 +21,7 @@ export const heroMedia = {
   /** e.g. '/hero/chair.mp4' — H.264/HEVC, under ~3MB, 8–12s, silent loop. */
   video: null as string | null,
   videoPoster: null as string | null,
-  image: null as string | null,
+  image: '/shop/hero.jpg' as string | null,
   alt: 'Barber mid-fade at the chair, clippers against the nape, shop lit low behind',
   seed: 3,
 };
@@ -29,40 +29,40 @@ export const heroMedia = {
 /** The Room — atmosphere set. Varied crops on purpose. */
 export const shopMedia: MediaSlot[] = [
   {
-    image: null,
+    image: '/shop/chairs.jpg',
     alt: 'The row of chairs down the length of the shop, mirrors facing mirrors',
     seed: 21,
   },
   {
-    image: null,
+    image: '/shop/tools.jpg',
     alt: 'Chrome clippers, combs and shears laid out on a folded towel',
     seed: 34,
   },
   {
-    image: null,
+    image: '/shop/floor.jpg',
     alt: 'Cut hair on the floor beneath a chair at the end of the day',
     seed: 47,
   },
   {
-    image: null,
+    image: '/shop/records.jpg',
     alt: 'Record player and shelf of LPs beside the waiting bench',
     seed: 55,
   },
   {
-    image: null,
+    image: '/shop/window.jpg',
     alt: 'Front window looking out onto Chapel Street in late afternoon light',
     seed: 63,
   },
 ];
 
 export const manifestoMedia: MediaSlot = {
-  image: null,
+  image: '/shop/fade-detail.jpg',
   alt: 'Close detail of a fade blending from skin into length, shot in raking light',
   seed: 88,
 };
 
 export const visitMedia: MediaSlot = {
-  image: null,
+  image: '/shop/chapel-street.jpg',
   alt: 'The shopfront on Chapel Street at dusk, sign lit',
   seed: 96,
 };

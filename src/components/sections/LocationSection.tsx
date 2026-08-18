@@ -1,8 +1,11 @@
 import { MapPanel } from '@/components/ui/MapPanel';
 import { TodayStatus } from '@/components/ui/TodayStatus';
 import { RevealLines, Reveal } from '@/components/ui/Reveal';
+import Link from 'next/link';
+
 import { business } from '@/data/business';
-import { weekSchedule } from '@/lib/hours';
+import { isMultiLocation, locations } from '@/data/locations';
+import { openDaysSummary, weekSchedule } from '@/lib/hours';
 
 /* ----------------------------------------------------------------------------
  * FINDING US
@@ -27,7 +30,7 @@ export function LocationSection() {
     >
       <div className="shell">
         <div className="flex items-baseline gap-4 border-b border-bone-line pb-4">
-          <span className="label-sm text-ink-mute">08</span>
+          <span className="label-sm text-ink-mute">09</span>
           <span className="label text-ink-mute">Finding us</span>
           <TodayStatus size="sm" className="ml-auto [&_span]:!text-ink-mute" />
         </div>
@@ -35,6 +38,7 @@ export function LocationSection() {
         <div className="mt-8 lg:mt-12 lg:grid lg:grid-cols-12 lg:gap-10">
           <RevealLines
             as="h2"
+            id="location-heading"
             lines={['912 Chapel.', 'Two blocks', 'off the Green.']}
             className="display-xl text-ink lg:col-span-7"
           />
@@ -91,6 +95,44 @@ export function LocationSection() {
             </p>
           </Reveal>
         </div>
+
+        {/* The other shops. Renders only when there is more than one address —
+            a "second location" strip on a single-shop site is a dead frame. */}
+        {isMultiLocation && (
+          <div className="mt-14 border-t border-bone-line pt-8">
+            <p className="label text-ink-mute">Also cutting at</p>
+            <ul className="mt-5 grid gap-6 sm:grid-cols-2">
+              {locations
+                .filter((l) => !l.isPrimary)
+                .map((l) => (
+                  <li key={l.slug}>
+                    <Link
+                      href={`/locations/${l.slug}`}
+                      className="group flex items-baseline justify-between gap-6 border-b border-bone-line pb-4"
+                    >
+                      <span>
+                        <span className="display-sm block text-ink transition-colors group-hover:text-ember-deep">
+                          {l.name}
+                        </span>
+                        <span className="mt-2 block text-sm text-ink-mute">
+                          {l.address.street}, {l.city}
+                        </span>
+                      </span>
+                      <span className="num shrink-0 text-sm text-ink-mute">
+                        {openDaysSummary(l.hours)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+            <Link
+              href="/locations"
+              className="link-draw label mt-6 inline-block text-ember-deep"
+            >
+              All {locations.length} shops
+            </Link>
+          </div>
+        )}
 
         {/* Practicalities */}
         <div className="mt-14 grid gap-px border-t border-bone-line bg-bone-line sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">

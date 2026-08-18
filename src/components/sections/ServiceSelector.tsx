@@ -10,6 +10,7 @@ export function ServiceSelector() {
     <section className="relative bg-ink py-20 lg:py-32" aria-labelledby="services-heading">
       <div className="shell">
         <SectionHead
+          headingId="services-heading"
           index="01"
           label="The menu"
           lines={['Three ways', 'to sit down.']}

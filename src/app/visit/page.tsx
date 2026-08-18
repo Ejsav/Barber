@@ -1,16 +1,23 @@
+import Link from 'next/link';
+
 import { PageHero } from '@/components/layout/PageHero';
 import { MapPanel } from '@/components/ui/MapPanel';
 import { TodayStatus } from '@/components/ui/TodayStatus';
 import { FinalCta } from '@/components/sections/FinalCta';
+import { FaqList } from '@/components/faq/FaqList';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Plate } from '@/components/ui/Plate';
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
+import { Rise } from '@/components/ui/HeroLines';
 import { BookButton } from '@/components/ui/BookButton';
+import { TrackedAnchor } from '@/components/analytics/TrackedAnchor';
 
 import { pageMetadata, breadcrumbJsonLd } from '@/lib/seo';
 import { business, fullAddress } from '@/data/business';
 import { visitMedia } from '@/data/media';
 import { weekSchedule } from '@/lib/hours';
+import { faqs, featuredFaqs } from '@/data/faq';
+import { isMultiLocation, locations } from '@/data/locations';
 
 export const metadata = pageMetadata({
   title: 'Visit the shop',
@@ -86,20 +93,41 @@ export default function VisitPage() {
           { k: 'Neighbourhood', v: business.neighborhood },
         ]}
       >
-        <Reveal delay={0.26}>
+        <Rise delay={0.44}>
           <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <BookButton size="lg" className="w-full sm:w-auto">
+            <BookButton size="lg" placement="visit" className="w-full sm:w-auto">
               Book your chair
             </BookButton>
-            <a
+            <TrackedAnchor
               href={business.phoneHref}
+              event="phone_click"
+              payload={{ placement: 'visit_hero' }}
               className="label flex h-14 items-center justify-center border border-ink-line px-6 text-bone transition-colors hover:border-bone"
             >
               Call {business.phone}
-            </a>
+            </TrackedAnchor>
             <TodayStatus size="sm" className="sm:ml-2" />
           </div>
-        </Reveal>
+          {isMultiLocation && (
+            <p className="mt-6 text-sm text-steel-light">
+              This page covers {locations[0].name}. We also cut at{' '}
+              {locations
+                .filter((l) => !l.isPrimary)
+                .map((l, i, arr) => (
+                  <span key={l.slug}>
+                    <Link
+                      href={`/locations/${l.slug}`}
+                      className="link-draw text-bone"
+                    >
+                      {l.name}, {l.city}
+                    </Link>
+                    {i < arr.length - 1 ? ' and ' : ''}
+                  </span>
+                ))}
+              .
+            </p>
+          )}
+        </Rise>
       </PageHero>
 
       {/* ---- Map + hours ---------------------------------------------------- */}
@@ -215,7 +243,11 @@ export default function VisitPage() {
               </p>
               <p className="mt-4 text-[0.9375rem] leading-relaxed text-steel-light">
                 If you are not sure what to book, book The Cut. It is the
-                easiest thing to adjust in the chair.
+                easiest thing to adjust in the chair — or{' '}
+                <Link href="/find-your-cut" className="link-draw text-bone">
+                  let the explorer name it for you
+                </Link>
+                .
               </p>
             </div>
           </div>
@@ -234,6 +266,33 @@ export default function VisitPage() {
                 </Reveal>
               ))}
             </dl>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Questions ------------------------------------------------------- */}
+      <section
+        className="on-bone bg-bone py-16 text-ink lg:py-24"
+        aria-labelledby="visit-faq-heading"
+      >
+        <div className="shell lg:grid lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-4">
+            <div className="flex items-baseline gap-4 border-b border-bone-line pb-4">
+              <span className="label-sm text-ink-mute">05</span>
+              <span className="label text-ink-mute">Questions</span>
+            </div>
+            <h2 id="visit-faq-heading" className="display-lg mt-6 text-ink">
+              Before you come.
+            </h2>
+            <Link
+              href="/faq"
+              className="link-draw label mt-6 inline-block text-ember-deep"
+            >
+              All {faqs.length} questions
+            </Link>
+          </div>
+          <div className="mt-8 lg:col-span-7 lg:col-start-6 lg:mt-0">
+            <FaqList items={featuredFaqs} tone="bone" headingLevel={3} />
           </div>
         </div>
       </section>
