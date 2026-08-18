@@ -1,4 +1,8 @@
+import Link from 'next/link';
+
 import { Reveal, RevealLines } from '@/components/ui/Reveal';
+import { TrackedAnchor } from '@/components/analytics/TrackedAnchor';
+import { business } from '@/data/business';
 import { visibleReviews } from '@/lib/content';
 import { getBarber } from '@/data/barbers';
 import { cn } from '@/lib/cn';
@@ -38,17 +42,22 @@ export function Reviews() {
     >
       <div className="shell">
         <div className="flex items-baseline gap-4 border-b border-bone-line pb-4">
-          <span className="label-sm text-ink-mute">05</span>
+          <span className="label-sm text-ink-mute">06</span>
           <span className="label text-ink-mute">In their words</span>
-          {isPlaceholder && (
+          {isPlaceholder ? (
             <span className="label-sm ml-auto border border-ember-deep px-2 py-1 text-ember-deep">
               Demo copy — replace before launch
             </span>
+          ) : (
+            <Link href="/reviews" className="link-draw label ml-auto text-ink">
+              All reviews
+            </Link>
           )}
         </div>
 
         <RevealLines
           as="h2"
+          id="reviews-heading"
           lines={['The part we', 'can’t write', 'ourselves.']}
           className="display-xl mt-8 text-ink lg:mt-12"
         />
@@ -96,6 +105,24 @@ export function Reviews() {
             ))}
           </ul>
         )}
+
+        {/* Two ways out, both useful: the filtered wall for someone still
+            deciding, and Google for someone who has decided and wants to say
+            so. No section on this site ends without a next action. */}
+        <Reveal className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <Link href="/reviews" className="link-draw label text-ink">
+            Read more reviews
+          </Link>
+          <TrackedAnchor
+            href={business.social.google}
+            external
+            event="review_click"
+            payload={{ placement: 'home_reviews' }}
+            className="link-draw label text-ember-deep"
+          >
+            Leave a review
+          </TrackedAnchor>
+        </Reveal>
       </div>
 
       {/* The section closes on a full-bleed ink band — the one review set

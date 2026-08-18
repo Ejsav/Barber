@@ -23,7 +23,8 @@ export function BarberSelection() {
     >
       <div className="shell">
         <SectionHead
-          index="03"
+          headingId="barbers-heading"
+          index="04"
           label="The roster"
           lines={['Who cuts your', 'hair matters.']}
           standfirst="Five barbers, five different hands. Read how they work, then book the one who fits what you want — not whoever happens to be free."

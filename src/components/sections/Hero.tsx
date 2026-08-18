@@ -120,7 +120,7 @@ export function Hero() {
             className="anim-rise mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-5 lg:mt-9"
             style={{ animationDelay: '0.42s' }}
           >
-            <BookButton size="xl" className="w-full sm:w-auto">
+            <BookButton size="xl" placement="hero" className="w-full sm:w-auto">
               Book your chair
             </BookButton>
 

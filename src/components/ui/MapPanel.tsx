@@ -1,4 +1,9 @@
-import { business, directionsUrl } from '@/data/business';
+import { TrackedAnchor } from '@/components/analytics/TrackedAnchor';
+import {
+  locationDirectionsUrl,
+  primaryLocation,
+  type Location,
+} from '@/data/locations';
 
 /* ============================================================================
  * MAP PANEL
@@ -14,7 +19,14 @@ import { business, directionsUrl } from '@/data/business';
  * cost you LCP and hand the visitor's IP to a third party on page load.
  * ========================================================================== */
 
-export function MapPanel({ className }: { className?: string }) {
+export function MapPanel({
+  className,
+  location = primaryLocation,
+}: {
+  className?: string;
+  /** Any shop. Defaults to the primary address. */
+  location?: Location;
+}) {
   return (
     <div className={`relative isolate overflow-hidden bg-ink ${className ?? ''}`}>
       <svg
@@ -50,14 +62,15 @@ export function MapPanel({ className }: { className?: string }) {
       <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-7">
         <p className="label-sm text-steel">Illustrative — not to scale</p>
         <div>
-          <p className="display-sm text-bone">{business.address.street}</p>
+          <p className="display-sm text-bone">{location.address.street}</p>
           <p className="label mt-2 text-steel-light">
-            {business.neighborhood} · {business.locality}
+            {location.neighborhood} · {location.locality}
           </p>
-          <a
-            href={directionsUrl}
-            target="_blank"
-            rel="noreferrer"
+          <TrackedAnchor
+            href={locationDirectionsUrl(location)}
+            external
+            event="directions_click"
+            payload={{ placement: 'map_panel', location: location.slug }}
             className="label mt-5 inline-flex h-14 items-center gap-3 bg-bone px-7 text-ink transition-colors hover:bg-ember"
           >
             Get directions
@@ -69,7 +82,7 @@ export function MapPanel({ className }: { className?: string }) {
                 strokeLinecap="square"
               />
             </svg>
-          </a>
+          </TrackedAnchor>
         </div>
       </div>
     </div>

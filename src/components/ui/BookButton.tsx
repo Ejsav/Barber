@@ -27,6 +27,8 @@ const SIZES: Record<Size, string> = {
 
 interface BookButtonProps {
   intent?: BookingIntent;
+  /** Reported to analytics so the shop can see which surface converts. */
+  placement?: string;
   children?: React.ReactNode;
   size?: Size;
   className?: string;
@@ -36,6 +38,7 @@ interface BookButtonProps {
 
 export function BookButton({
   intent,
+  placement,
   children = 'Book your chair',
   size = 'lg',
   className,
@@ -46,7 +49,7 @@ export function BookButton({
   const button = (
     <button
       type="button"
-      onClick={() => open(intent)}
+      onClick={() => open({ ...intent, ...(placement ? { placement } : null) })}
       className={cn(
         'group relative inline-flex items-center justify-center gap-3 font-mono uppercase',
         'transition-colors duration-300 ease-[var(--ease-out-expo)]',

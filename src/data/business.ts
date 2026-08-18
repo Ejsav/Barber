@@ -89,8 +89,39 @@ export const business = {
      */
     url: null as string | null,
     provider: null as string | null, // e.g. 'Booksy'
-    /** Per-barber deep links, if the provider supports them. Keyed by slug. */
+    /**
+     * Deep links, most specific first. Every BOOK control on the site resolves
+     * through lib/booking.ts in this order:
+     *
+     *   barber + service  →  barberUrls[slug]  →  serviceUrls[id]
+     *                     →  locationUrls[slug]  →  url
+     *
+     * Anything left empty simply falls through to the next rung, so a shop can
+     * start with one link and add per-barber pages later without touching a
+     * component.
+     */
     barberUrls: {} as Record<string, string>,
+    serviceUrls: {} as Record<string, string>,
+    locationUrls: {} as Record<string, string>,
+    /**
+     * When true and per-barber links exist, a generic BOOK opens the barber
+     * chooser first rather than dropping the visitor on a provider page that
+     * asks the same question with none of the shop's context. Set false to
+     * always go straight through.
+     */
+    chooseBarberFirst: true,
+  },
+
+  /* -- Gift cards ---------------------------------------------------------
+   * `url` — an external checkout (Square, Booksy, Shopify…). With it set, the
+   * gift-card CTAs appear and link out. Leave it null and set `inShop: true`
+   * to say honestly that they are sold at the counter; set both off and every
+   * gift-card affordance disappears from the site.
+   * --------------------------------------------------------------------- */
+  giftCards: {
+    url: null as string | null,
+    inShop: true,
+    blurb: 'Any amount, no expiry, redeemable against any service or product.',
   },
 
   /* -- Social ------------------------------------------------------------- */

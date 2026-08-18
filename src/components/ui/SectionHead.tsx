@@ -9,6 +9,7 @@ import { cn } from '@/lib/cn';
  * -------------------------------------------------------------------------- */
 
 export function SectionHead({
+  headingId,
   index,
   label,
   lines,
@@ -19,6 +20,8 @@ export function SectionHead({
   as = 'h2',
   className,
 }: {
+  /** Target for the section's aria-labelledby. Always pass one. */
+  headingId?: string;
   /** Two-digit section number, e.g. '02'. */
   index: string;
   label: string;
@@ -68,6 +71,7 @@ export function SectionHead({
         )}
       >
         <RevealLines
+          id={headingId}
           as={as}
           lines={lines}
           className={cn(

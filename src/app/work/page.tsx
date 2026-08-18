@@ -4,6 +4,7 @@ import { PageHero } from '@/components/layout/PageHero';
 import { WorkGrid } from '@/components/work/WorkGrid';
 import { BeforeAfter } from '@/components/work/BeforeAfter';
 import { FinalCta } from '@/components/sections/FinalCta';
+import { SocialRail } from '@/components/sections/SocialRail';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Reveal, RevealLines } from '@/components/ui/Reveal';
 
@@ -105,11 +106,17 @@ export default function WorkPage() {
               <Link href="/services" className="link-draw text-bone">
                 see the menu
               </Link>
-              .
+              . If you like a frame but do not know what to ask for,{' '}
+              <Link href="/find-your-cut" className="link-draw text-bone">
+                the cut explorer
+              </Link>{' '}
+              will name it for you.
             </p>
           </Reveal>
         </div>
       </section>
+
+      <SocialRail />
 
       <FinalCta />
     </>

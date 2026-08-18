@@ -104,7 +104,7 @@ export function BarberCard({
         >
           <button
             type="button"
-            onClick={() => open({ barberSlug: barber.slug })}
+            onClick={() => open({ barberSlug: barber.slug, placement: 'barber_card' })}
             className={cn(
               'label h-12 flex-1 transition-colors',
               onBone

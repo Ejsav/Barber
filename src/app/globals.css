@@ -60,13 +60,31 @@
 
 @layer base {
   :root {
-    --header-h: 4.25rem;
+    --nav-h: 4.25rem;
+    /* Zero unless an announcement is live. `--header-h` is what the rest of
+     * the site offsets against, so every page adapts to the bar appearing or
+     * expiring without a single component knowing about it. */
+    --announce-h: 0rem;
+    --header-h: calc(var(--nav-h) + var(--announce-h));
     color-scheme: dark;
+  }
+
+  html.has-announcement {
+    --announce-h: 2.5rem;
+  }
+
+  /* Set by the inline script in the root layout, before first paint, so a
+   * dismissed bar never flashes on the next page. */
+  html[data-announce='dismissed'] {
+    --announce-h: 0rem;
+  }
+  html[data-announce='dismissed'] .announce {
+    display: none;
   }
 
   @media (min-width: 1024px) {
     :root {
-      --header-h: 5.25rem;
+      --nav-h: 5.25rem;
     }
   }
 

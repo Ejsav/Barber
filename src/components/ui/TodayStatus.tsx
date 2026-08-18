@@ -1,7 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { resolveToday } from '@/lib/hours';
+import { resolveToday, type WeekHours } from '@/lib/hours';
 import { cn } from '@/lib/cn';
 
 /* ----------------------------------------------------------------------------
@@ -28,15 +28,18 @@ export function TodayStatus({
   className,
   size = 'md',
   compact = false,
+  hours,
 }: {
   className?: string;
   size?: 'sm' | 'md';
   /** Drops the weekday. Used where horizontal room is tight, e.g. the hero. */
   compact?: boolean;
+  /** Another shop's week. Defaults to the primary address. */
+  hours?: WeekHours;
 }) {
   const bucket = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  const today = bucket === null ? null : resolveToday();
+  const today = bucket === null ? null : resolveToday(hours);
 
   return (
     <p

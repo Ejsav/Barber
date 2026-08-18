@@ -140,8 +140,13 @@ export function Plate({
         className,
       )}
       style={style}
-      role="img"
-      aria-label={alt}
+      /* An empty alt means the plate is decorative — a thumbnail beside a name
+       * that already says who it is. Announcing it as an unlabelled image is
+       * worse than not announcing it, so it leaves the accessibility tree
+       * entirely rather than carrying role="img" with nothing to read. */
+      {...(alt
+        ? { role: 'img' as const, 'aria-label': alt }
+        : { 'aria-hidden': true })}
     >
       {/* Base tone — the underlying exposure, kept low so the dots carry it */}
       <div

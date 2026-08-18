@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { PageHero } from '@/components/layout/PageHero';
 import { ServiceRow } from '@/components/services/ServiceRow';
 import { FinalCta } from '@/components/sections/FinalCta';
+import { PromotionsSection } from '@/components/sections/PromotionsSection';
+import { GiftCardLink } from '@/components/ui/GiftCardLink';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Reveal } from '@/components/ui/Reveal';
 
@@ -101,7 +103,11 @@ export default function ServicesPage() {
               <p className="mt-3 text-[0.9375rem] leading-relaxed text-steel-light">
                 Book The Cut. Your barber will tell you in the chair if a fade
                 or scissor work suits you better and adjust the booking there —
-                you are not locked into what you clicked.
+                you are not locked into what you clicked.{' '}
+                <Link href="/find-your-cut" className="link-draw text-bone">
+                  Or let the explorer name it
+                </Link>
+                .
               </p>
             </div>
             <div>
@@ -123,9 +129,22 @@ export default function ServicesPage() {
                 people once you pick a service.
               </p>
             </div>
+            <div>
+              <p className="label text-ember">Gift cards</p>
+              <p className="mt-3 text-[0.9375rem] leading-relaxed text-steel-light">
+                {business.giftCards.blurb}
+              </p>
+              <GiftCardLink
+                placement="services"
+                label="Gift cards"
+                className="link-draw label mt-3 inline-block text-bone"
+              />
+            </div>
           </Reveal>
         </div>
       </div>
+
+      <PromotionsSection />
 
       <FinalCta />
     </>

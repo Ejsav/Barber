@@ -6,18 +6,26 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 
 import { Wordmark } from '@/components/ui/Wordmark';
+import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { useBooking } from '@/components/booking/BookingProvider';
 import { lockScroll } from '@/components/layout/SmoothScroll';
 import { business, directionsUrl } from '@/data/business';
 import { priceFloor } from '@/data/services';
-import { NAV } from '@/data/nav';
+import { NAV, SECONDARY_NAV } from '@/data/nav';
+import type { Announcement } from '@/data/announcements';
 import { cn } from '@/lib/cn';
+import { hasLightHero } from '@/lib/heroTone';
+import { track } from '@/lib/analytics';
 
-export function Header() {
+export function Header({ announcement }: { announcement: Announcement | null }) {
   const pathname = usePathname();
   const { open } = useBooking();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  /* Pages that open on the bone ground get the solid chrome from the first
+   * pixel — see lib/heroTone.ts. */
+  const solid = scrolled || menuOpen || hasLightHero(pathname);
 
   /* Solid chrome once the hero is behind us. rAF-throttled, passive. */
   useEffect(() => {
@@ -57,22 +65,26 @@ export function Header() {
       <header
         className={cn(
           'fixed inset-x-0 top-0 z-[100] transition-[background-color,border-color,backdrop-filter] duration-500',
-          scrolled || menuOpen
+          solid
             ? 'border-b border-ink-line bg-ink/85 backdrop-blur-xl'
             : 'border-b border-transparent bg-transparent',
         )}
-        style={{ height: 'var(--header-h)' }}
       >
+        <AnnouncementBar initial={announcement} />
+
         {/* Scrim for the transparent state: the hero plate is bright behind the
             right-hand controls, and the phone number has to stay readable. */}
         <div
           aria-hidden="true"
           className={cn(
             'pointer-events-none absolute inset-x-0 top-0 h-[200%] bg-gradient-to-b from-ink/85 via-ink/45 to-transparent transition-opacity duration-500',
-            scrolled || menuOpen ? 'opacity-0' : 'opacity-100',
+            solid ? 'opacity-0' : 'opacity-100',
           )}
         />
-        <div className="shell relative flex h-full items-center justify-between gap-6">
+        <div
+          className="shell relative flex items-center justify-between gap-6"
+          style={{ height: 'var(--nav-h)' }}
+        >
           <Link
             href="/"
             className="group relative -ml-1 flex items-center px-1 py-2"
@@ -109,13 +121,14 @@ export function Header() {
           <div className="flex items-center gap-3">
             <a
               href={business.phoneHref}
+              onClick={() => track('phone_click', { placement: 'header' })}
               className="label hidden text-steel-light transition-colors hover:text-bone xl:inline-block"
             >
               {business.phone}
             </a>
             <button
               type="button"
-              onClick={() => open()}
+              onClick={() => open({ placement: 'header' })}
               className="label hidden h-11 items-center bg-ember px-6 text-ink transition-colors hover:bg-ember-deep hover:text-bone lg:inline-flex"
             >
               Book
@@ -217,6 +230,27 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               </ul>
             </nav>
 
+            {SECONDARY_NAV.length > 0 && (
+              <motion.nav
+                aria-label="More"
+                className="mt-6 flex flex-wrap gap-x-6 gap-y-3"
+                initial={reduce ? undefined : { opacity: 0 }}
+                animate={reduce ? undefined : { opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                {SECONDARY_NAV.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={onClose}
+                    className="label text-steel-light transition-colors active:text-ember"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </motion.nav>
+            )}
+
             <motion.div
               className="mt-8 flex flex-col gap-3"
               initial={reduce ? undefined : { opacity: 0, y: 16 }}
@@ -227,7 +261,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                 type="button"
                 onClick={() => {
                   onClose();
-                  openBooking();
+                  openBooking({ placement: 'mobile_menu' });
                 }}
                 className="label flex h-16 items-center justify-center bg-ember text-ink"
               >
@@ -236,6 +270,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               <div className="grid grid-cols-2 gap-3">
                 <a
                   href={business.phoneHref}
+                  onClick={() => track('phone_click', { placement: 'mobile_menu' })}
                   className="label flex h-14 items-center justify-center border border-ink-line text-bone"
                 >
                   Call
@@ -244,6 +279,9 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                   href={directionsUrl}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() =>
+                    track('directions_click', { placement: 'mobile_menu' })
+                  }
                   className="label flex h-14 items-center justify-center border border-ink-line text-bone"
                 >
                   Directions

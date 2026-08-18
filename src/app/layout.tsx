@@ -12,7 +12,9 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileActionBar } from '@/components/layout/MobileActionBar';
 import { BookingProvider } from '@/components/booking/BookingProvider';
+import { activeAnnouncement } from '@/lib/promotions';
 import { BookingDrawer } from '@/components/booking/BookingDrawer';
+import { BarberChooser } from '@/components/booking/BarberChooser';
 
 /* Display: condensed, editorial, built for extreme scale.
  * Variable on both weight and optical size — the display utilities in
@@ -91,12 +93,37 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  /* Resolved at build time so the bar is in the server HTML and reserves its
+   * own height before first paint. AnnouncementBar re-resolves it against the
+   * visitor's clock on mount, which is what stops a statically generated page
+   * advertising last month's hours. */
+  const announcement = activeAnnouncement(new Date());
+
   return (
     <html
       lang="en"
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      className={`${display.variable} ${sans.variable} ${mono.variable}${
+        announcement ? ' has-announcement' : ''
+      }`}
       suppressHydrationWarning
     >
+      <head>
+        {/*
+          Runs before first paint: an announcement the visitor already
+          dismissed is never drawn, rather than drawn and then removed on
+          hydration. Two hundred bytes, and it is the difference between a
+          polished header and a flicker on every page.
+        */}
+        {announcement && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `try{if(sessionStorage.getItem('ht:announce-dismissed')===${JSON.stringify(
+                announcement.id,
+              )})document.documentElement.dataset.announce='dismissed'}catch(e){}`,
+            }}
+          />
+        )}
+      </head>
       <body className="bg-ink text-bone antialiased">
         {/*
           Motion serialises each entrance animation's `initial` state into the
@@ -126,13 +153,14 @@ export default function RootLayout({
         <MotionRoot>
           <BookingProvider>
             <SmoothScroll />
-            <Header />
+            <Header announcement={announcement} />
             <main id="main" className="relative">
               {children}
             </main>
             <Footer />
             <MobileActionBar />
             <BookingDrawer />
+            <BarberChooser />
           </BookingProvider>
         </MotionRoot>
 

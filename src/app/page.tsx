@@ -1,11 +1,13 @@
 import { Hero } from '@/components/sections/Hero';
 import { TrustStrip } from '@/components/sections/TrustStrip';
 import { ServiceSelector } from '@/components/sections/ServiceSelector';
+import { CutExplorerSection } from '@/components/sections/CutExplorerSection';
 import { WorkRail } from '@/components/sections/WorkRail';
 import { BarberSelection } from '@/components/sections/BarberSelection';
 import { Manifesto } from '@/components/sections/Manifesto';
 import { Reviews } from '@/components/sections/Reviews';
 import { FirstVisit } from '@/components/sections/FirstVisit';
+import { PromotionsSection } from '@/components/sections/PromotionsSection';
 import { ShopExperience } from '@/components/sections/ShopExperience';
 import { LocationSection } from '@/components/sections/LocationSection';
 import { FinalCta } from '@/components/sections/FinalCta';
@@ -27,10 +29,12 @@ export default function HomePage() {
       <Hero />
       <TrustStrip />
       <ServiceSelector />
+      <CutExplorerSection />
       <WorkRail />
       <BarberSelection />
       <Manifesto />
       <Reviews />
+      <PromotionsSection />
       <FirstVisit />
       <ShopExperience />
       <LocationSection />

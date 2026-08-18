@@ -235,3 +235,14 @@ export const workByBarber = (slug: string) =>
   work.filter((w) => w.barber === slug);
 
 export const getWork = (id: string) => work.find((w) => w.id === id);
+
+/**
+ * Deterministic plate seed for a lookbook item.
+ *
+ * Every generated plate varies with its seed, so this has to be derived from
+ * the WHOLE id — reading a single character out of "w-01" yields two distinct
+ * values across sixteen frames and the grid renders as the same picture over
+ * and over. One helper, so no call site can get that wrong again.
+ */
+export const workSeed = (item: Pick<WorkItem, 'id'>) =>
+  Number(item.id.replace(/\D/g, '')) * 7 + 3;
