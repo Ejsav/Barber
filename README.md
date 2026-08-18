@@ -75,6 +75,10 @@ are all defined at the top of `src/app/globals.css`.
 
 ### Photography
 
+**[`docs/photography.md`](docs/photography.md) is the shot list** — all 31 image
+slots, the file path each one goes to, and a full brief for what the frame
+should contain. Hand it to a photographer as it stands.
+
 Every image on the site goes through one component, `components/ui/Plate.tsx`.
 
 - Give it a `src` and it renders an optimised `next/image`.
