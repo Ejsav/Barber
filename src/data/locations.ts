@@ -97,7 +97,7 @@ const chapelStreet: Location = {
   accessibility: business.accessibility,
   opened: business.founded,
   media: {
-    image: null,
+    image: '/shop/chapel-street.jpg',
     alt: 'The shopfront on Chapel Street at dusk, sign lit',
     seed: 96,
   },
@@ -148,7 +148,7 @@ const whitneyAvenue: Location = {
   accessibility: 'Step-free entry from the rear lot. Accessible restroom.',
   opened: '2023', // PLACEHOLDER
   media: {
-    image: null,
+    image: '/shop/whitney-avenue.jpg',
     alt: 'The Whitney Avenue shopfront in the morning, awning out, lot behind',
     seed: 112,
   },

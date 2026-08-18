@@ -1,11 +1,18 @@
 # Shot list
 
-Thirty-one image slots. Every one currently renders a generated halftone plate,
-so the site is complete without them — photographs replace the plates one at a
-time, in any order, with no layout change and no code change beyond setting a
-path in `src/data/`.
+Thirty-one image slots, all of them currently filled by AI-generated demo
+assets — replace them with real photography before launch, and shoot to the
+briefs below.
 
-Drop files at the paths below and the wiring is mechanical.
+Two of the delivered files need replacing before that, whatever else happens:
+`shop/whitney-avenue.jpg` carries a different business's name on its fascia,
+door and window neon plus a street number that contradicts `data/locations.ts`,
+and `work/w-16.jpg` shows an adult haircut rather than the child's first
+haircut its slot describes.
+
+Any slot whose file is removed falls back to a generated halftone plate at the
+same crop, so the set can be replaced one frame at a time. `node
+scripts/wire-images.mjs` reports what is wired and what is on a plate.
 
 ---
 

@@ -240,9 +240,12 @@ function DevNotice() {
             expire on their own dates. Check none are stale at launch.
           </li>
           <li>
-            · Photography — set <code>image</code> in <code>data/work.ts</code>{' '}
-            and <code>portrait</code> in <code>data/barbers.ts</code> to swap
-            generated plates for real shots.
+            · Photography — the images in <code>/public</code> are
+            AI-generated demo assets. Reshoot to{' '}
+            <code>docs/photography.md</code> before launch.{' '}
+            <code>shop/whitney-avenue.jpg</code> carries another shop&rsquo;s
+            name and address; <code>work/w-16.jpg</code> does not match its alt
+            text.
           </li>
           <li>
             · <code>app/privacy/page.tsx</code> — describes what this build

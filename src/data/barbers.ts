@@ -97,7 +97,7 @@ export const barbers: Barber[] = [
     daysIn: ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
     instagram: 'https://instagram.com/',
     instagramHandle: '@marcus.halftone',
-    portrait: null,
+    portrait: '/team/marcus-reyes.jpg',
     portraitAlt:
       'Portrait of Marcus Reyes, owner and master barber at Halftone, at his chair',
     seed: 11,
@@ -132,7 +132,7 @@ export const barbers: Barber[] = [
     daysIn: ['tuesday', 'thursday', 'friday', 'saturday', 'sunday'],
     instagram: 'https://instagram.com/',
     instagramHandle: '@dezcuts',
-    portrait: null,
+    portrait: '/team/desmond-whitfield.jpg',
     portraitAlt:
       'Portrait of Desmond Whitfield, senior barber at Halftone, holding clippers',
     seed: 27,
@@ -165,7 +165,7 @@ export const barbers: Barber[] = [
     daysIn: ['wednesday', 'thursday', 'friday', 'saturday'],
     instagram: 'https://instagram.com/',
     instagramHandle: '@nina.cuts.hair',
-    portrait: null,
+    portrait: '/team/nina-castellanos.jpg',
     portraitAlt:
       'Portrait of Nina Castellanos, scissor specialist at Halftone, mid-cut',
     seed: 43,
@@ -201,7 +201,7 @@ export const barbers: Barber[] = [
     daysIn: ['tuesday', 'wednesday', 'friday', 'saturday', 'sunday'],
     instagram: 'https://instagram.com/',
     instagramHandle: '@yusuf.razor',
-    portrait: null,
+    portrait: '/team/yusuf-amari.jpg',
     portraitAlt:
       'Portrait of Yusuf Amari, barber at Halftone, stropping a straight razor',
     seed: 58,
@@ -234,7 +234,7 @@ export const barbers: Barber[] = [
     daysIn: ['wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
     instagram: 'https://instagram.com/',
     instagramHandle: '@junecutshair',
-    portrait: null,
+    portrait: '/team/june-park.jpg',
     portraitAlt:
       'Portrait of June Park, barber at Halftone, at the window of the shop',
     seed: 72,

@@ -180,7 +180,14 @@ it never appears in a production build.
       (no cookies, no analytics vendor, nothing submitted). It stops being
       accurate the moment a tag manager, pixel, CRM or chat widget is added.
       Update it in the same commit, and have the client's counsel review it.
-- [ ] **Photography** — replace the generated plates (see above).
+- [ ] **Photography** — the 32 images in `/public` are AI-generated demo
+      assets, the same status as the sample reviews: fine for a fictional shop,
+      not fine to launch a real one on. A shop's lookbook is a claim about its
+      own work. Reshoot to `docs/photography.md` and replace them.
+      Two need attention first either way: `shop/whitney-avenue.jpg` carries
+      another business's name on its fascia, door and window neon, and a street
+      number that contradicts `data/locations.ts`; `work/w-16.jpg` shows an
+      adult cut, not the child's first haircut its alt text describes.
 - [ ] **`components/ui/MapPanel.tsx`** — the map graphic is an abstract,
       explicitly labelled illustration, not a real street layout. GET DIRECTIONS
       already links to Google Maps from the configured address. To embed a live
